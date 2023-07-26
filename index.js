@@ -652,6 +652,10 @@ function formatarData(data) {
     return `${dia}/${mes}/${ano}`;
 }
 
+function formatarMoeda(valor) {
+  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 function extrairDados(data) {
     const dadosExtraidos = [];
 
@@ -667,8 +671,8 @@ function extrairDados(data) {
                     'Origem': frete.coleta.cidade.nome,
                     'Destino': entrega.cidade.nome,
                     'Data de Coleta': formatarData(frete.coleta.data),
-                    'Valor do Frete': frete.valorOfertadoEmbarcador,
-                    'Valor Estimado na NF': entrega.valorNotaFiscal,
+                    'Valor do Frete': formatarMoeda(frete.valorOfertadoEmbarcador),
+                    'Valor Estimado na NF': formatarMoeda(entrega.valorNotaFiscal),
                 });
             });
         });
