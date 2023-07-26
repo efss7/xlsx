@@ -644,12 +644,20 @@ const data = [
 
 
 
-function formatarData(data) {
-    const dataObj = new Date(data);
-    const dia = dataObj.getDate().toString().padStart(2, '0');
-    const mes = (dataObj.getMonth() + 1).toString();
-    const ano = dataObj.getFullYear();
-    return `${dia}/${mes}/${ano}`;
+function converterDataParaSerialParaData(dataString) {
+  const dataObj = new Date(dataString);
+  const dataReferencia = new Date('1899-12-30');
+  const diferencaEmMilissegundos = dataObj - dataReferencia;
+  const diferencaEmDias = diferencaEmMilissegundos / (1000 * 60 * 60 * 24);
+  const dataSerial = Math.floor(diferencaEmDias);
+
+  const dataEmMilissegundos = dataReferencia.getTime() + dataSerial * (1000 * 60 * 60 * 24);
+  const dataFormatada = new Date(dataEmMilissegundos);
+  const dia = String(dataFormatada.getDate()).padStart(2, '0');
+  const mes = String(dataFormatada.getMonth() + 1).padStart(2, '0');
+  const ano = dataFormatada.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
 }
 
 function formatarMoeda(valor) {
@@ -670,7 +678,7 @@ function extrairDados(data) {
                     'Embarcador': info.embarcadorNome,
                     'Origem': frete.coleta.cidade.nome,
                     'Destino': entrega.cidade.nome,
-                    'Data de Coleta': formatarData(frete.coleta.data),
+                    'Data de Coleta': converterDataParaSerialParaData(frete.coleta.data),
                     'Valor do Frete': formatarMoeda(frete.valorOfertadoEmbarcador),
                     'Valor Estimado na NF': formatarMoeda(entrega.valorNotaFiscal),
                 });
